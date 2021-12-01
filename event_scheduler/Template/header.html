@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to DTEN Desk Reservation System</title>
+  </head>
+ <body>
+    
+    {% include 'navbar.html' %}
+    <div class="container">
+        <div class="jumbotron">
+            {% block title %}
+                <h1>Welcome to DTEN Desk Reservation System</h1>
+            {% endblock title  %}
+        </div>
+    {% include 'css.html' %}
+
+    {% include 'messages.html' %}
+    
+    {% block content %}
+
+    {% endblock %} 
+      
+  </body>
+</html>

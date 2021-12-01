@@ -1,0 +1,38 @@
+{% comment %} <div class="card" style="width: 18rem;">
+    <img class="card-img-top">
+        <div class="card-body">
+            <h5 class="card-title">Meeting room: {{ BookingItem.Room_number }}</h5>
+            <h5 class="card-title">{{ BookingItem.Date }}</h5>
+            <h5 class="card-title"> from: {{ BookingItem.time_id }} for: {{ BookingItem.Duration }} h</h5> 
+            <a href='{{ BookingItem.get_absolute_url }}' class="btn btn-primary">Details</a>
+        </div>
+    </div> {% endcomment %}
+
+
+    <tr>
+        <td>{{ BookingItem.Booking_id }}</td>
+        <td>{{ BookingItem.Room_number }}</td>
+        <td>{{ BookingItem.Business_unit }}</td>
+        <td>{{ BookingItem.Date }}</td>
+        <td>{{ BookingItem.time_id }}</td>
+        <td>{{ BookingItem.Duration }}</td>
+        <td>{{ BookingItem.User_profile }}</td>
+        {% if request.user.is_authenticated and request.user == object.User_profile %}
+        {% comment %} <td><a href='{{ BookingItem.get_absolute_url }}' class="btn btn-primary">Edit</a></td> {% endcomment %}
+        <td>
+        <a href="{% url 'event_scheduler:reservation-update' object.id %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'event_scheduler:reservation-delete' object.id %}" class="btn btn-danger">Delete</a>
+        </td>
+        {% endif %}
+    </tr>
+
+{% comment %} 
+
+<div class="row">
+    <div class="col-8"
+        <li class="list-group-item">{{ BookingItem.Room_number }} - {{ BookingItem.Date }} - {{ BookingItem.Duration }}</li>
+    </div>
+    <div class="col-4">
+        <a href='{{ BookingItem.get_absolute_url }}' class="btn btn-primary">Details</a>
+    </div>
+</div> {% endcomment %}

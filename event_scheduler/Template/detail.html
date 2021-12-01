@@ -1,0 +1,13 @@
+{% extends 'header.html' %}
+
+{% block content %}
+<h1>Meeting room number: {{ object.Room_number }}</h1>
+<h2>Reservation date: {{ object.Date }}</h2>
+<h2>Reservation time: {{ object.time_id }}</h2>
+{% if request.user.is_authenticated and request.user == object.User_profile %}
+        <a href=' {% url 'reservation-update' object.id %} ' class="btn btn-primary">Update</a>
+        <a href=' {% url 'reservation-delete' object.id %} ' class="btn btn-danger">Delete</a>
+{% endif %}
+
+
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends 'header.html' %}
+<script>
+    $(function () {
+        $('.datetime-input').datetimepicker({
+            format:'YYYY-MM-DD HH:mm:ss'
+        });
+    });
+</script>
+    {% block content %}
+    <form method="POST" action="."> {% csrf_token %}
+        <table>{{ form.as_ul}}</table>
+        {% comment %} <a href="../.." type="submit">Create</a> {% endcomment %}
+        <button type="submit">New Reservation</button>
+    </form>
+
+    {% endblock  %}

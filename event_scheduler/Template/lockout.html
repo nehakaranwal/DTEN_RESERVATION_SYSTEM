@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Account locked: unsuccesful 5 login attempts. Please try again later</h2>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href="{% url 'event_scheduler:user_login_view' %}">Try Log In Again after 24 hours</a>
+        </small>
+    </div>
+{% endblock content %}
