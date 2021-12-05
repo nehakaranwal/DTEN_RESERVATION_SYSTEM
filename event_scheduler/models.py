@@ -20,6 +20,10 @@ from django.contrib.auth import get_user_model
 from django_rest_passwordreset.tokens import get_token_generator
 from django import forms
 from datetime import datetime
+from django.db.models.signals import post_save,post_delete
+from web_project.settings import DEFAULT_FROM_EMAIL
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
 
 
 
@@ -69,15 +73,15 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username']
 
     def get_full_name(self):
         """Retrieve full name for user"""
-        return self.name
+        return self.username
 
     def get_short_name(self):
         """Retrieve short name of user"""
-        return self.name
+        return self.username
 
     def __str__(self):
         """Return string representation of user"""
@@ -95,12 +99,14 @@ class MeetingRoom(models.Model):
     Floor = models.CharField(max_length=2,unique=True)
     capacity = models.IntegerField(blank=False)
     Availability = models.BooleanField(default=True)
+
+ 
     
     def __str__(self):
         return str(self.Room_number)
         
     def get_absolute_url(self):
-        return reverse('room-details', kwargs={'room_number': self.Room_number})
+        return reverse('room:room-details', kwargs={'Room_number': self.Room_number})
 
     
 class BookingItem(models.Model):
@@ -117,7 +123,7 @@ class BookingItem(models.Model):
         DG = 'DG', _('Digital')
     Booking_id = models.CharField(max_length = 10,unique=True,default=utils.create_new_ref_number)
     Business_unit = models.CharField(max_length=3,choices=BUSINESS.choices,default=BUSINESS.IT,)
-    Room_number = models.OneToOneField(MeetingRoom,to_field='Room_number', related_name='Room', on_delete=models.CASCADE)
+    Room_number = models.ForeignKey(MeetingRoom,to_field='Room_number', related_name='Room', on_delete=models.CASCADE)
     Date = models.DateField("Date")
     time_choice = (
        (1, '8:00'),
@@ -141,3 +147,62 @@ class BookingItem(models.Model):
         return (self.Booking_id)
     def get_absolute_url(self):
         return reverse('BookingItem-details', kwargs={'id': self.id})
+    
+class Meeting(models.Model):
+    Room_number = models.ForeignKey(MeetingRoom,to_field='Room_number', related_name='Roomavailbility', on_delete=models.CASCADE)
+    available_date = models.DateField("Date")
+    time_choice = (
+       (1, '8:00'),
+       (2, '9:00'),
+       (3, '10:00'),
+       (4, '11:00'),
+       (5, '12:00'),
+       (6, '13:00'),
+       (7, '14:00'),
+       (8, '15:00'),
+       (9, '16:00'),
+       (10, '17:00'),
+       (11, '18:00'),
+       (12, '19:00'),
+       (13, '20:00'),
+      )     
+    available_time_id = models.IntegerField(choices=time_choice)
+    
+@receiver(post_save,sender=BookingItem)
+def  RType(sender, instance, created, **kwargs):
+    room = instance.Room_number
+    queryset2 = Meeting.objects.filter(Room_number=instance.Room_number)
+    if created and not queryset2:
+        room.Availability = False
+        room.save()
+    
+         
+def send_update(sender,instance, **kwargs):
+    booking = instance
+    context = {'booking':booking}
+    message = render_to_string("booking_conf.html",context)
+    Body = message
+    Subject = "Booking Confirmation" 
+    from_email = DEFAULT_FROM_EMAIL
+    email = booking.User_profile
+    message = EmailMessage(subject=Subject,body=Body,from_email=from_email,to=[email])
+    message.content_subtype = "html"
+    return message.send()
+
+
+@receiver(post_delete,sender=BookingItem)
+def  RType(sender, instance, **kwargs):
+    room = instance.Room_number
+    room.Availability = True
+    room.save()
+def send_delete(sender,instance, **kwargs):
+    booking = instance
+    context = {'booking':booking}
+    message = render_to_string("booking_del_conf.html",context)
+    Body = message
+    Subject = "Booking Cancelled" 
+    from_email = DEFAULT_FROM_EMAIL
+    email = booking.User_profile
+    message = EmailMessage(subject=Subject,body=Body,from_email=from_email,to=[email])
+    message.content_subtype = "html"
+    return message.send()

@@ -17,8 +17,11 @@ from django.urls import reverse_lazy
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR2 = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+EVENT_DIR = os.path.join(BASE_DIR, 'event_scheduler/Template/')
+ROOM_DIR = os.path.join(BASE_DIR, 'room/Template/room/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -38,7 +41,6 @@ LOGOUT_REDIRECT_URL = reverse_lazy('event_scheduler')
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'event_scheduler',
+    'django.contrib.admin',
     'django_rest_passwordreset',
     'bootstrap_datepicker_plus',
     'crispy_forms',
@@ -79,7 +82,7 @@ ROOT_URLCONF = 'web_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['event_scheduler/Template/'],
+        'DIRS': [EVENT_DIR,ROOM_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,7 +104,7 @@ WSGI_APPLICATION = 'web_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR2 / 'db.sqlite3',
     }
 }
 

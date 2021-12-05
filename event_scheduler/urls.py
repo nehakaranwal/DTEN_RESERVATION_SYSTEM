@@ -42,7 +42,6 @@ urlpatterns = [
     path('create_user/', user_create_view, name='user-create'),
     path('login/', user_login_view, name='user_login_view'),
     path('logout/', user_logout, name='logout'),
-    path('room/', include('room.urls')),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', include('django.contrib.auth.urls')),

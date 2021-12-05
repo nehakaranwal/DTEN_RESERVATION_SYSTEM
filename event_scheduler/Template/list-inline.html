@@ -14,7 +14,7 @@
         <td>{{ BookingItem.Room_number }}</td>
         <td>{{ BookingItem.Business_unit }}</td>
         <td>{{ BookingItem.Date }}</td>
-        <td>{{ BookingItem.time_id }}</td>
+        <td>{{ BookingItem.get_time_id_display }}</td>
         <td>{{ BookingItem.Duration }}</td>
         <td>{{ BookingItem.User_profile }}</td>
         {% if request.user.is_authenticated and request.user == object.User_profile %}

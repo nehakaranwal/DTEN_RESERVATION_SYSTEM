@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <br>
+
+        <h2>Booking ID: {{ booking.Booking_id }} has been cancelled</h2>
+        <h3>Cancelled Booking Details </h3>
+        <h3>
+            Contact Details:
+        </h3>
+        Email: {{ booking.User_profile}} <br/>
+
+        <h2>Booking Details:</h2>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Business_unit</th>
+                    <th>Room_number</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Duration</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                    <tr>
+                        <td>{{ booking.Business_unit }}</td>
+                        <td>{{ booking.Room_number }}</td>
+                        <td>{{ booking.Date }}</td>
+                        <td>{{ booking.time_id }}</td>
+                        <td>{{ booking.Duration }}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

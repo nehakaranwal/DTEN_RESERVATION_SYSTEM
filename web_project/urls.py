@@ -18,8 +18,10 @@ from django.urls import path,include
 from event_scheduler.admin import admin_site
 from event_scheduler import views
 from django.contrib.auth import views as auth_views
+from django.conf.urls import include, url
 
 urlpatterns = [
     path('myadmin/', admin_site.urls),
     path('event_scheduler/', include('event_scheduler.urls')),
+    path('room/', include('room.urls',namespace='room')),
 ]

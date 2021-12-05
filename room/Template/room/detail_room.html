@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Meeting room number: {{ object.Room_number }}</h1>
+<h2>Capacity of the room: {{ object.capacity }}</h2>
+<h2>Room Type: {{ object.Room_Types }}</h2>
+<h2>Floor: {{ object.Floor }}</h2>
+<h2>Availability: {{ object.Availability }}</h2>
+<div class='content'>
+        <table class='table'>
+            <thead>
+            <tr>
+                <th scope='col' class='align-middle'>Available_Dates</th>
+                <th scope='col' class='align-middle'>Available_Time</th>
+           </tr>
+          </thead>
+          <tbody>
+                {% for object in availbility_list %}
+                <tr>
+                        <td>{{ object.available_date }}</td>
+                        <td>{{ object.get_available_time_id_display }}</td>
+                </tr>
+                {% endfor %}
+          </tbody>
+
+{% if request.user.is_authenticated %}
+        <a href="{% url 'room:room-update' object.Room_number %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'room:room-delete' object.Room_number %}" class="btn btn-danger">Delete</a>
+{% endif %}
+
+
+{% endblock content %}

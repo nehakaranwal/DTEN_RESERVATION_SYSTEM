@@ -38,5 +38,6 @@ class CreateReservationModelForm(forms.ModelForm):
          exclude = ("User_profile",)
          fields = '__all__'
          widgets = {
+            'Booking_id' : forms.TextInput(attrs={'readonly': 'readonly'}),
             'Date': forms.SelectDateWidget(empty_label="Not set", months=None),
         }

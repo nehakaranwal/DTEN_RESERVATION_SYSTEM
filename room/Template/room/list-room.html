@@ -1,0 +1,16 @@
+{% extends 'header.html' %}
+
+{% block content %}
+    <div>
+        <div class="container">
+            <a href="{% url 'room:room-create' %}" class="btn btn-primary">New Room</a>
+        </div> 
+    </div>
+<div class="content">
+        {% for object in object_list %}
+
+            {% include  'list-room-inline.html' with meeting_room=object %}
+
+        {% endfor %}
+        {% endblock content %}
+</div>

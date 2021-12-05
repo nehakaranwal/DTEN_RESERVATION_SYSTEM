@@ -15,23 +15,20 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import Http404
 import requests
 from .forms import CreateReservationModelForm,CreateUserModelForm
-import datetime
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import BookingItem, UserProfile
+from .models import BookingItem, UserProfile,Meeting
 
 from django.shortcuts import render,redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.http import JsonResponse
-from rest_framework.decorators import action
-import datetime
+from datetime import datetime,date
 
 from django.views.decorators.csrf import csrf_exempt
+from .signals import send_update
 
 
 
@@ -99,11 +96,15 @@ def reservation_list_view(request):
     if request.GET.get('user-filter'):
         user_filter = request.GET.get('user-filter')
         queryset = BookingItem.objects.filter(User_profile=user_filter)
-        print
     else:
         user = request.user
         queryset = BookingItem.objects.filter(User_profile=user.id)
         user_list = UserProfile.objects.all()
+        if user.is_vaccinated:
+            pass
+        else:
+            messages.error(request,f"{user} is not vaccinated.")
+            return redirect("event_scheduler:user_login_view")
     title = "Reservations list"
     template_name = 'list.html'
     context = {
@@ -124,7 +125,41 @@ def reservation_create_view(request):
         if form.is_valid():
             data = request.POST.copy()
             user = request.user
-            print(user)
+            queryset = BookingItem.objects.filter(User_profile=user.id)
+            print(type(queryset))
+            tot_book = []
+            tot_book = queryset
+            if len(tot_book) <= 4:
+                pass
+            else:
+                messages.error(request,f"{user} has exceeded the limit of maximum 5 booking.")
+                return redirect("event_scheduler:reservation-list")
+            if len(data['Date_month']) < 2:
+                    data['Date_month'] = '0' + data['Date_month']
+                    print(data['Date_month'])
+            date_str = data['Date_year'] + '-' + data['Date_month'] + '-' + data['Date_day']
+            temp_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            print(temp_date)
+            print(date.today())
+            if  temp_date < date.today():
+                    messages.error(request,"Please select the current/future date")
+                    return redirect("event_scheduler:reservation-create")
+            queryset2 = Meeting.objects.filter(Room_number=data['Room_number'])
+            cnt = 0
+            for object in queryset2:
+                cnt = cnt + 1
+                Meeting_list=object
+                print((Meeting_list.available_date))
+                print(int(data["time_id"]) + int(data["Duration"]))
+                #or ((int(data['time_id']) + int(data['Duration'])) <= Meeting_list.available_time_id)
+                if (temp_date == Meeting_list.available_date) and (int(data['time_id']) == Meeting_list.available_time_id):
+                    print(Meeting_list.id)
+                    Meeting.objects.filter(id=Meeting_list.id).delete()
+                    break
+                elif len(queryset2) == cnt:
+                    messages.error(request,f"Meeting Room {Meeting_list.Room_number} has been booked for the given time.Please visit the meeting room page to check available time slots")
+                    return redirect("event_scheduler:reservation-list")
+                
             data.update({'User_profile_id': int(user.id)})
             doc=form.save(commit=False)
             doc.User_profile_id = int(user.id)
@@ -159,6 +194,7 @@ def reservation_update_view(request, *Room_number, id):
     form = CreateReservationModelForm(request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
+        messages.info(request, f"Booking has been updated.")
         return redirect('/event_scheduler')
     template_name = 'create.html'
     context = {
@@ -176,6 +212,7 @@ def reservation_delete_view(request, *room_number, id):
     template_name = 'delete.html'
     if request.method == "POST":
         obj.delete()
+        messages.info(request, f"Booking has been deleted.")
         return redirect('/event_scheduler')
     context = {
         'title': title,
