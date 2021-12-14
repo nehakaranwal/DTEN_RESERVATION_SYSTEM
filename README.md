@@ -1,35 +1,64 @@
 # DTEN_RESERVATION_SYSTEM
 
-Install One API toolkit from https://www.intel.com/content/www/us/en/developer/articles/guide/download-documentation-intel-oneapi-toolkits-components.html
-Django Tutorial in Visual Studio Code
+**Download the One API base toolkit from the below link:**
 
-To successfully complete this Django tutorial, you must do the following (which are the same steps as in the general Python tutorial):
+https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html
 
-Install the Python extension.
+**Install the m_BaseKit_p_2022.1.0.92.dmg file**
 
-Install a version of Python 3 (for which this tutorial is written). Options include:
 
-(All operating systems) A download from python.org; typically use the Download Python 3.9.1 button that appears first on the page (or whatever is the latest version).
-(Linux) The built-in Python 3 installation works well, but to install other Python packages you must run sudo apt install python3-pip in the terminal.
-(macOS) An installation through Homebrew on macOS using brew install python3 (the system install of Python on macOS is not supported).
-(All operating systems) A download from Anaconda (for data science purposes).
-On Windows, make sure the location of your Python interpreter is included in your PATH environment variable. You can check the location by running path at the command prompt. If the Python interpreter's folder isn't included, open Windows Settings, search for "environment", select Edit environment variables for your account, then edit the Path variable to include that folder.
+The initial download includes the installer application files only. The installer will acquire all the tools during the installation process.
 
-Create a superuser and enable the administrative interface#
-By default, Django provides an administrative interface for a web app that's protected by authentication. The interface is implemented through the built-in django.contrib.admin app, which is included by default in the project's INSTALLED_APPS list (settings.py), and authentication is handled with the built-in django.contrib.auth app, which is also in INSTALLED_APPS by default.
+Step 1: Select the disk image (DMG file) that you downloaded.
 
-Perform the following steps to enable the administrative interface:
+Step 2: Select the install icon to start bootstrapper.app.
 
-Create a superuser account in the app by opening a Terminal in VS Code for your virtual environment, then running the command python manage.py createsuperuser --username=<username> --email=<email>, replacing <username> and <email>, of course, with your personal information. When you run the command, Django prompts you to enter and confirm your password.
+Step 3: Follow the instructions in the installer.
 
-Be sure to remember your username and password combination. These are the credentials you use to authenticate with the app.
+Step 4: Explore the Get Started Guide.
 
-Add the following URL route in the project-level urls.py (web_project/urls.py in this tutorial) to point to the built-in administrative interface:
+ 
+ 
+In order to build samples, both the Base Kit and HPC Kit must be installed. If the Base Kit is not installed, you will be missing key libraries required to build projects. If the HPC Kit is not installed, you will be missing a compatible compiler. To install these kits, please see the Intel oneAPI Toolkits page for installation options.
+Follow These Steps for the Intel® oneAPI Base Toolkit and Intel® oneAPI HPC Toolkit:
+1.Configure Your System.
+2.Build and Run a sample project using one of these methods:
+3.Command Line
+4.Visual Studio Code
+5.After you have run a sample, learn more about the Intel® oneAPI Base Toolkit and the Intel® oneAPI HPC Toolkit in Next Steps
 
-# This path is included by default when creating the app
- path("admin/", admin.site.urls),
-Run the server, then open a browser to the app's /admin page (such as http://127.0.0.1:8000/admin when using the development server).
 
-A login page appears, courtesy of django.contrib.auth. Enter your superuser credentials.
+**Please folow this link:https://www.intel.com/content/www/us/en/develop/documentation/get-started-with-intel-oneapi-base-hpc-macos/top/before-you-begin.html
+in order to configure your system**
 
-Django tutorial: default Django login prompt
+Extensions for Visual Studio Code Users
+You can use VS Code extensions to set your environment, create launch configurations, and browse and download samples:
+From Visual Studio Code, click on the Extensions logo in the left navigation.
+Click Install.
+Next, locate the extension titled Environment Configurator for Intel oneAPI Toolkits.
+Click Install.
+
+**Create a Project Using Visual Studio Code
+Set the oneAPI environment:**
+1.Press Ctrl+Shift+P ( or View -> Command Palette… ) to open the Command Palette.
+2.Type Intel oneAPI to view options of the installed extensions.
+3.Click on Intel oneAPI: Initialize environment variables.
+4.If prompted, locate the setvars file in <install_dir>/opt/intel/oneapi/
+5.In the case of multiple folders in workspace, select the appropriate one. All tasks, launches, and terminals created from VS Code will now contain the oneAPI environment.
+6.Click on the oneAPI button on the left navigation to view samples.
+7.A list of available samples will open in the left navigation
+
+Select a sample. Instructions for how to build and run that sample will appear in a preview window.
+To build and run a sample, click the + to the right of the sample name.
+Create a new folder for the sample
+
+
+**Set the oneAPI Environment**
+Press Ctrl+Shift+P ( or View -> Command Palette… ) to open the Command Palette.
+Type Intel oneAPI: Initialize environment variables. Click on Intel oneAPI: Initialize environment variables.
+
+From the left navigation, click README.md to view instructions for the sample.
+
+The below link has all thedetails in order to set up Django python framework into oneAPI.
+
+**https://code.visualstudio.com/docs/python/tutorial-django#_create-a-requirementstxt-file-for-the-environment**
